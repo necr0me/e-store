@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: e-store
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+security:
+  jwt:
+    secret_key: ${JWT_SECRET_KEY}
+    access_token_expiration: 3600000
+    refresh_token_expiration: 252000000
