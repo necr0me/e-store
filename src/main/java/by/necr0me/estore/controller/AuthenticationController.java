@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<String> register(@RequestBody RegistrationRequestDto request) {
+    public ResponseEntity<String> register(@RequestBody @Validated RegistrationRequestDto request) {
         authenticationService.register(request);
 
         return ResponseEntity.ok("User registered successfully");
