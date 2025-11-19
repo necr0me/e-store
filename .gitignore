@@ -33,5 +33,5 @@ build/
 .vscode/
 
 ### Sensitive data ###
-**/main/**/resources/.env
+.env
 **/main/**/resources/liquibase.yaml
