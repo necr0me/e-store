@@ -12,9 +12,7 @@ import by.necr0me.estore.service.AuthenticationService;
 import by.necr0me.estore.service.JwtService;
 import by.necr0me.estore.service.UserService;
 import io.jsonwebtoken.JwtException;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,20 +34,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     private final RefreshTokenRepository refreshTokenRepository;
-    private final UserService userService;
 
     public AuthenticationServiceImpl(UserRepository userRepository,
                                      JwtService jwtService,
                                      PasswordEncoder passwordEncoder,
                                      AuthenticationManager authenticationManager,
-                                     RefreshTokenRepository refreshTokenRepository, UserService userService)
+                                     RefreshTokenRepository refreshTokenRepository)
     {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.refreshTokenRepository = refreshTokenRepository;
-        this.userService = userService;
     }
 
     @Override
