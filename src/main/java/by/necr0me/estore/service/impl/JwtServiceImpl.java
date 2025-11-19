@@ -8,6 +8,7 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtParserBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.function.Function;
 
+@Slf4j
 @Service
 public class JwtServiceImpl implements JwtService {
     @Value("${security.jwt.secret_key}")
@@ -60,7 +62,7 @@ public class JwtServiceImpl implements JwtService {
     public boolean isAccessTokenValid(String token, UserDetails user) {
         String username = extractUsername(token);
 
-        return username.equals(user.getUsername()) && !isTokenExpired(token);
+        return username.equals(user.getUsername()) && isTokenNotExpired(token);
     }
 
     @Override
@@ -72,15 +74,15 @@ public class JwtServiceImpl implements JwtService {
 
         return username.equals(user.getUsername())
                 && isTokenValid
-                && isTokenExpired(token);
+                && isTokenNotExpired(token);
     }
 
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+    private boolean isTokenNotExpired(String token) {
+        return !extractExpiration(token).before(new Date());
     }
 
     private Claims extractClaimsFromToken(String token) {
@@ -94,7 +96,10 @@ public class JwtServiceImpl implements JwtService {
 
     private String generateToken(User user, long expirationTime) {
         JwtBuilder builder = Jwts.builder()
+                .claims()
                 .subject(user.getUsername())
+                .add("role", user.getRole())
+                .and()
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(getSigningKey());

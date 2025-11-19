@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 public class RegistrationRequestDto {
     @Length(min = 6, max = 32)
-    @NotEmpty
+    @NotEmpty // TODO: write own @unique validation (for email too)
     private final String username;
 
     @Email

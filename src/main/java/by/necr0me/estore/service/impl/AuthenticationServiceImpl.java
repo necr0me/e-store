@@ -10,12 +10,12 @@ import by.necr0me.estore.repository.RefreshTokenRepository;
 import by.necr0me.estore.repository.UserRepository;
 import by.necr0me.estore.service.AuthenticationService;
 import by.necr0me.estore.service.JwtService;
+import by.necr0me.estore.service.UserService;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
@@ -35,18 +36,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     private final RefreshTokenRepository refreshTokenRepository;
+    private final UserService userService;
 
     public AuthenticationServiceImpl(UserRepository userRepository,
                                      JwtService jwtService,
                                      PasswordEncoder passwordEncoder,
                                      AuthenticationManager authenticationManager,
-                                     RefreshTokenRepository refreshTokenRepository)
+                                     RefreshTokenRepository refreshTokenRepository, UserService userService)
     {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.refreshTokenRepository = refreshTokenRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -83,29 +86,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public AuthResponseDto refreshTokens(HttpServletRequest request, HttpServletResponse response) {
-        String token = extractRefreshTokenFromCookie(request);
-
-        if(token == null) {
-            throw new JwtException("Refresh token not found");
-        }
-
-        String username = jwtService.extractUsername(token);
+    public AuthResponseDto refreshTokens(String refreshToken) {
+        String username = jwtService.extractUsername(refreshToken);
 
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("No user found"));
 
-        if (!jwtService.isRefreshTokenValid(token, user)) {
-            throw new JwtException("Invalid refresh token");
+        if (!jwtService.isRefreshTokenValid(refreshToken, user)) {
+            throw new JwtException("Refresh token is invalid");
         }
 
-        String accessToken = jwtService.generateAccessToken(user);
-        String refreshToken = jwtService.generateRefreshToken(user);
+        String newAccessToken = jwtService.generateAccessToken(user);
+        String newRefreshToken = jwtService.generateRefreshToken(user);
 
         revokeRefreshTokens(user);
 
-        saveRefreshToken(refreshToken, user);
+        saveRefreshToken(newRefreshToken, user);
 
-        return new AuthResponseDto(accessToken, refreshToken);
+        return new AuthResponseDto(newAccessToken, newRefreshToken);
     }
 
     private void revokeRefreshTokens(User user) {
@@ -126,14 +123,5 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         refreshToken.setUser(user);
 
         refreshTokenRepository.save(refreshToken);
-    }
-
-    private String extractRefreshTokenFromCookie(HttpServletRequest request) {
-        for(Cookie cookie : request.getCookies()){
-            if(cookie.getName().equals("refreshToken"))
-                return cookie.getValue();
-        }
-
-        return null;
     }
 }

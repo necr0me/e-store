@@ -1,7 +1,6 @@
 package by.necr0me.estore.config.security;
 
 import by.necr0me.estore.config.security.jwt.JwtFilter;
-import by.necr0me.estore.handler.security.CustomAccessDeniedHandler;
 import by.necr0me.estore.handler.security.CustomLogoutHandler;
 import by.necr0me.estore.service.UserService;
 import org.springframework.context.annotation.Bean;
@@ -30,19 +29,15 @@ public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
 
-    private final CustomAccessDeniedHandler customAccessDeniedHandler;
-
     private final CustomLogoutHandler customLogoutHandler;
 
     public SecurityConfig(
             UserService userService,
             JwtFilter jwtFilter,
-            CustomAccessDeniedHandler customAccessDeniedHandler,
             CustomLogoutHandler customLogoutHandler
     ) {
         this.userService = userService;
         this.jwtFilter = jwtFilter;
-        this.customAccessDeniedHandler = customAccessDeniedHandler;
         this.customLogoutHandler = customLogoutHandler;
     }
 
@@ -57,7 +52,6 @@ public class SecurityConfig {
                 })
                 .userDetailsService(userService)
                 .exceptionHandling(e -> {
-                    e.accessDeniedHandler(customAccessDeniedHandler);
                     e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
                 })
                 .sessionManagement(session -> { session.sessionCreationPolicy(STATELESS); })
