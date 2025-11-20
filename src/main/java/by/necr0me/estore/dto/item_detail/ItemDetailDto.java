@@ -1,4 +1,4 @@
-package by.necr0me.estore.dto.item;
+package by.necr0me.estore.dto.item_detail;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -7,12 +7,19 @@ import org.hibernate.validator.constraints.Length;
 
 @Getter
 @AllArgsConstructor
-public class ItemDto {
+public class ItemDetailDto {
     private Long id;
 
     @NotNull
-    @Length(min = 4, max = 64)
+    @Length(min = 3, max = 255)
     private String name;
 
-    private String description;
+    @Length(max = 5)
+    private String unit;
+
+    @NotNull
+    private String unitType;
+
+    @NotNull
+    private String comparativeRule;
 }

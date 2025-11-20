@@ -1,0 +1,39 @@
+databaseChangeLog:
+- changeSet:
+    id: 1763639962023-1
+    author: pavel (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: item_detailsPK
+            name: id
+            type: BIGINT
+        - column:
+            name: comparative_rule
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: unit
+            type: VARCHAR(255)
+        - column:
+            name: unit_type
+            type: VARCHAR(255)
+        tableName: item_details
+- changeSet:
+    id: 1763639962023-2
+    author: pavel (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: name
+        constraintName: UC_ITEM_DETAILSNAME_COL
+        tableName: item_details
+

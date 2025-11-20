@@ -5,12 +5,11 @@ import by.necr0me.estore.dto.auth.LoginRequestDto;
 import by.necr0me.estore.dto.auth.RegistrationRequestDto;
 import by.necr0me.estore.entity.RefreshToken;
 import by.necr0me.estore.entity.User;
-import by.necr0me.estore.entity.enums.Role;
+import by.necr0me.estore.entity.enums.user.Role;
 import by.necr0me.estore.repository.RefreshTokenRepository;
 import by.necr0me.estore.repository.UserRepository;
 import by.necr0me.estore.service.AuthenticationService;
 import by.necr0me.estore.service.JwtService;
-import by.necr0me.estore.service.UserService;
 import io.jsonwebtoken.JwtException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -62,7 +61,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthResponseDto authenticate(LoginRequestDto request) {
-        authenticationManager.authenticate(
+        authenticationManager.authenticate( // todo: invalid username or password exception if it is
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
                         request.getPassword()

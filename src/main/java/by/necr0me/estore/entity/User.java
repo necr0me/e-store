@@ -1,6 +1,6 @@
 package by.necr0me.estore.entity;
 
-import by.necr0me.estore.entity.enums.Role;
+import by.necr0me.estore.entity.enums.user.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
