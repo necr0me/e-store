@@ -1,3 +1,3 @@
 databaseChangeLog:
   - include:
-      file: /db/migrations/20251119111436_changelog.yaml
+      file: /db/migrations/20251119140512_changelog.yaml

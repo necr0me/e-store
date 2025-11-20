@@ -4,8 +4,6 @@ import by.necr0me.estore.dto.auth.AuthResponseDto;
 import by.necr0me.estore.dto.auth.LoginRequestDto;
 import by.necr0me.estore.dto.auth.RegistrationRequestDto;
 import by.necr0me.estore.service.AuthenticationService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;

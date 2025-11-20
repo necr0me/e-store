@@ -47,7 +47,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/auth/**").permitAll();
-                    auth.requestMatchers("/admin/**").hasRole("ADMIN");
+                    auth.requestMatchers("/admin/**").hasAuthority("ADMIN"); // todo: change on hasRole after enum fix
                     auth.anyRequest().authenticated();
                 })
                 .userDetailsService(userService)
