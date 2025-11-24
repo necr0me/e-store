@@ -18,12 +18,12 @@ public class ItemController {
     }
 
     @GetMapping
-    public Slice<Item> get(@RequestParam int page) {
+    public Slice<Item> get(@RequestParam int page) { // TODO: change on read
         return itemService.readAll(page);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ItemDto> get(@PathVariable Long id) {
+    public ResponseEntity<ItemDto> get(@PathVariable Long id) { // TODO: change on read
         return ResponseEntity.ok(itemService.read(id));
     }
 

@@ -6,7 +6,10 @@ import by.necr0me.estore.exception.EntityNotFoundException;
 import by.necr0me.estore.mapper.ItemDetailMapper;
 import by.necr0me.estore.repository.ItemDetailRepository;
 import by.necr0me.estore.service.ItemDetailService;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ItemDetailServiceImpl implements ItemDetailService {
@@ -17,6 +20,12 @@ public class ItemDetailServiceImpl implements ItemDetailService {
     public ItemDetailServiceImpl(ItemDetailRepository itemDetailRepository, ItemDetailMapper itemDetailMapper) {
         this.itemDetailRepository = itemDetailRepository;
         this.itemDetailMapper = itemDetailMapper;
+    }
+
+    @Override
+    public List<ItemDetailDto> readAllByPrefix(String prefix) {
+        List<ItemDetail> itemDetails = itemDetailRepository.findByNameStartingWithIgnoreCase(prefix);
+        return itemDetailMapper.toDto(itemDetails);
     }
 
     @Override
