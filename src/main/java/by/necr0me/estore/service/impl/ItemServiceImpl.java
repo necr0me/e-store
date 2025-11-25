@@ -22,7 +22,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Slice<Item> readAll(int page) {
+    public Slice<Item> readAll(int page) { // TODO: change Item on ItemDto
         return itemRepository.findAll(PageRequest.of(page, 10));
     }
 

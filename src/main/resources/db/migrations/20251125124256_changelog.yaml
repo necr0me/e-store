@@ -1,0 +1,56 @@
+databaseChangeLog:
+- changeSet:
+    id: 1764074588656-1
+    author: pavel (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: specific_item_detailsPK
+            name: id
+            type: BIGINT
+        - column:
+            name: value
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: item_id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: item_detail_id
+            type: BIGINT
+        tableName: specific_item_details
+- changeSet:
+    id: 1764074588656-2
+    author: pavel (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: item_detail_id
+        baseTableName: specific_item_details
+        constraintName: FKg10lk084kxaoo4b86kk8om5du
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: item_details
+        validate: true
+- changeSet:
+    id: 1764074588656-3
+    author: pavel (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: item_id
+        baseTableName: specific_item_details
+        constraintName: FKs8204pmy5njhnqbmyn054ua6t
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: items
+        validate: true
+
